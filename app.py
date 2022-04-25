@@ -48,10 +48,12 @@ class MainWindow(QMainWindow):
 
         layout = QVBoxLayout()
 
-        passwordLengthInput = QLineEdit("3")
-        passwordLengthInput.textChanged.connect(self.passwordLengthChange)
-
-        layout.addWidget(passwordLengthInput)
+        self.passwordInput = QLineEdit("3")
+        self.passwordInput.textChanged.connect(self.passwordLengthChange)
+        layout.addWidget(self.passwordInput)
+        randomPassword = generatePassword(3)
+        self.passwordDisplay = QLabel("Password: "+randomPassword)
+        layout.addWidget(self.passwordDisplay)
 
         widget = QWidget()
         widget.setLayout(layout)
@@ -63,7 +65,7 @@ class MainWindow(QMainWindow):
     def passwordLengthChange(self, text):
         try:
             password = generatePassword(int(text))
-            print(password)
+            self.passwordDisplay.setText("Password: " + password)
         except:
             print("Invalid length input")
 
