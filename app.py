@@ -40,6 +40,7 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.passwordInput)
         randomPassword = generatePassword(3)
         self.passwordDisplay = QLabel("Password: "+randomPassword)
+        self.passwordDisplay.setWordWrap(True)
         layout.addWidget(self.passwordDisplay)
 
         widget = QWidget()
@@ -51,8 +52,12 @@ class MainWindow(QMainWindow):
 
     def passwordLengthChange(self, text):
         try:
-            password = generatePassword(int(text))
-            self.passwordDisplay.setText("Password: " + password)
+            if(int(text) > 10000):
+                self.passwordDisplay.setText("Password length too long")
+            else:
+                password = generatePassword(int(text))
+                self.passwordDisplay.setText("Password: " + password)
+
         except:
             print("Invalid length input")
 
