@@ -1,42 +1,75 @@
-import random
+import sys
 import string
+import random
+
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
-    QApplication, QMessageBox, QWidget, QLabel, QPushButton, QVBoxLayout
+    QApplication,
+    QCheckBox,
+    QComboBox,
+    QDateEdit,
+    QDateTimeEdit,
+    QDial,
+    QDoubleSpinBox,
+    QFontComboBox,
+    QLabel,
+    QLCDNumber,
+    QLineEdit,
+    QMainWindow,
+    QProgressBar,
+    QPushButton,
+    QRadioButton,
+    QSlider,
+    QSpinBox,
+    QTimeEdit,
+    QVBoxLayout,
+    QWidget,
 )
 
-app = QApplication([])
+
+def generatePassword(length):
+    lower = string.ascii_lowercase
+    upper = string.ascii_uppercase
+    num = string.digits
+    symbols = string.punctuation
+    all = lower + upper + num + symbols
+    temp = random.sample(all, length)
+    password = "".join(temp)
+    return password
+
+# Subclass QMainWindow to customize your application's main window
 
 
-window = QWidget()
-v_layout = QVBoxLayout()
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
 
-btn1 = QPushButton('button 1')
-btn2 = QPushButton('button 2')
+        self.setWindowTitle("Secure Password")
 
-v_layout.addWidget(QLabel('hello world'))
-v_layout.addWidget(btn1)
-v_layout.addWidget(btn2)
+        layout = QVBoxLayout()
+
+        passwordLengthInput = QLineEdit("3")
+        passwordLengthInput.textChanged.connect(self.passwordLengthChange)
+
+        layout.addWidget(passwordLengthInput)
+
+        widget = QWidget()
+        widget.setLayout(layout)
+
+        # Set the central widget of the Window. Widget will expand
+        # to take up all the space in the window by default.
+        self.setCentralWidget(widget)
+
+    def passwordLengthChange(self, text):
+        try:
+            password = generatePassword(int(text))
+            print(password)
+        except:
+            print("Invalid length input")
 
 
-def on_btn1_clicked():
-    alert = QMessageBox()
-    alert.setText('this is an alert msg')
-    alert.exec()
-
-
-btn1.clicked.connect(on_btn1_clicked)
-
-window.setLayout(v_layout)
+app = QApplication(sys.argv)
+window = MainWindow()
 window.show()
-app.exec()
 
-length = int(input('\nEnter the length of password: '))
-lower = string.ascii_lowercase
-upper = string.ascii_uppercase
-num = string.digits
-symbols = string.punctuation
-all = lower + upper + num + symbols
-temp = random.sample(all, length)
-password = "".join(temp)
-
-print("Your password is: " + password)
+app.exec_()
