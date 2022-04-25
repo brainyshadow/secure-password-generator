@@ -4,6 +4,7 @@ import random
 import pyperclip
 
 from PySide6.QtWidgets import (
+    QCheckBox,
     QApplication,
     QLabel,
     QLineEdit,
@@ -39,8 +40,13 @@ class MainWindow(QMainWindow):
         self.passwordInput = QLineEdit("3")
         self.passwordInput.textChanged.connect(self.passwordLengthChange)
         layout.addWidget(self.passwordInput)
-        randomPassword = generatePassword(3)
-        self.passwordDisplay = QLabel("Password: "+randomPassword)
+
+        self.shouldCopy = QCheckBox("Copy to Clipboard", self)
+        layout.addWidget(self.shouldCopy)
+
+        initialPassword = generatePassword(3)
+
+        self.passwordDisplay = QLabel("Password: "+initialPassword)
         self.passwordDisplay.setWordWrap(True)
         layout.addWidget(self.passwordDisplay)
 
@@ -57,7 +63,9 @@ class MainWindow(QMainWindow):
                 self.passwordDisplay.setText("Password length too long")
             else:
                 password = generatePassword(int(text))
-                pyperclip.copy(password)
+                shouldCopy = self.shouldCopy.checkState()
+                if(shouldCopy):
+                    pyperclip.copy(password)
                 self.passwordDisplay.setText("Password: " + password)
 
         except:
