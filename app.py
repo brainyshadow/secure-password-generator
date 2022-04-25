@@ -1,6 +1,7 @@
 import sys
 import string
 import random
+import pyperclip
 
 from PySide6.QtWidgets import (
     QApplication,
@@ -56,6 +57,7 @@ class MainWindow(QMainWindow):
                 self.passwordDisplay.setText("Password length too long")
             else:
                 password = generatePassword(int(text))
+                pyperclip.copy(password)
                 self.passwordDisplay.setText("Password: " + password)
 
         except:
