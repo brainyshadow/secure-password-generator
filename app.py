@@ -2,7 +2,6 @@ import sys
 import string
 import random
 
-from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QApplication,
     QLabel,
@@ -19,6 +18,8 @@ def generatePassword(length):
     num = string.digits
     symbols = string.punctuation
     all = lower + upper + num + symbols
+    while(len(all) < length):
+        all = all+all
     temp = random.sample(all, length)
     password = "".join(temp)
     return password
