@@ -2,7 +2,7 @@ import sys
 import string
 import random
 import pyperclip
-
+from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import (
     QCheckBox,
     QApplication,
@@ -39,6 +39,13 @@ class MainWindow(QMainWindow):
 
         self.passwordInput = QLineEdit("3")
         self.passwordInput.textChanged.connect(self.passwordLengthChange)
+        image = QPixmap("./images/lock.png")
+
+        img = QLabel(self)
+        img.setPixmap(image)
+        img.setStyle
+        layout.addWidget(img)
+
         layout.addWidget(self.passwordInput)
 
         self.shouldCopy = QCheckBox("Copy to Clipboard", self)
