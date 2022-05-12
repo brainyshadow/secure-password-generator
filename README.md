@@ -1,7 +1,7 @@
 <img src = 'https://github.com/BrainyShadow/secure-password-generator/blob/main/images/lock.png?raw=true' height = 150>
 <h1>Secure Password Generator</h1>
 
-Secure Password Generator is a application built with python that securely and automaticall generates a secure password for you.
+Secure Password Generator is a small application that securely and automatically generates a secure password for you.
  
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
