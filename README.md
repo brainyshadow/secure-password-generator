@@ -10,7 +10,7 @@ Secure Password Generator is a application built with python that securely and a
 > Secure Password Generator was built using <b>PySide6</b>, the python <b>random</b> package, and the python <b>string</b> package.  
  
  
-<img src="https://raw.githubusercontent.com/BrainyShadow/secure-password-generator/main/images/App.png" width = 600></img>
+<img src="https://raw.githubusercontent.com/BrainyShadow/secure-password-generator/main/images/App.png" width = 450></img>
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   
