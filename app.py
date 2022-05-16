@@ -1,6 +1,7 @@
 import sys
 import string
 import random
+import math
 import pyperclip
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import (
@@ -15,16 +16,36 @@ from PySide6.QtWidgets import (
 
 
 def generatePassword(length):
-    lower = string.ascii_lowercase
-    upper = string.ascii_uppercase
-    num = string.digits
-    symbols = string.punctuation
-    all = lower + upper + num + symbols
-    while(len(all) < length):
-        all = all+all
-    temp = random.sample(all, length)
-    password = "".join(temp)
-    return password
+    replacements = [["bang", "!"], ["star", "*"], ["pound", "#"],
+                    ["at", "@"], ["dot", "."], ["dash", "-"], ["comma", ","]]
+    averageEnglishWordLength = 4
+    print("test")
+    numWords = math.floor(length/averageEnglishWordLength)
+    if(numWords > 1):
+        numWords = numWords-1
+    else:
+        numWords = 1
+    password = ""
+    reminder = ""
+    with open("dict.txt", "r") as file:
+        data = file.read()
+        words = data.split()
+
+    passwordNotFound = True
+    wordsFound = 0
+    while passwordNotFound:
+
+        index = random.randint(0, len(words))
+        temp = words[index]
+        print(temp)
+        if((len(password) + len(temp)) < length):
+            password = password+temp
+            reminder = reminder+temp
+            wordsFound += 1
+        elif (numWords-wordsFound) < 2:
+            passwordNotFound = False
+
+    return [password, reminder]
 
 # Subclass QMainWindow to customize your application's main window
 
@@ -51,11 +72,15 @@ class MainWindow(QMainWindow):
         self.shouldCopy = QCheckBox("Copy to Clipboard", self)
         layout.addWidget(self.shouldCopy)
 
-        initialPassword = generatePassword(3)
+        [password, reminder] = generatePassword(3)
 
-        self.passwordDisplay = QLabel("Password: "+initialPassword)
+        self.passwordDisplay = QLabel("Password: "+password)
         self.passwordDisplay.setWordWrap(True)
         layout.addWidget(self.passwordDisplay)
+
+        self.reminderDisplay = QLabel("Reminder: "+reminder)
+        self.reminderDisplay.setWordWrap(True)
+        layout.addWidget(self.reminderDisplay)
 
         widget = QWidget()
         widget.setLayout(layout)
@@ -69,7 +94,8 @@ class MainWindow(QMainWindow):
             if(int(text) > 10000):
                 self.passwordDisplay.setText("Password length too long")
             else:
-                password = generatePassword(int(text))
+                [password, reminder] = generatePassword(int(text))
+                print(password)
                 shouldCopy = self.shouldCopy.checkState()
                 if(shouldCopy):
                     pyperclip.copy(password)
