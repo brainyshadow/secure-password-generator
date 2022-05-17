@@ -1,3 +1,4 @@
+from email import charset
 import sys
 import string
 import random
@@ -17,9 +18,8 @@ from PySide6.QtWidgets import (
 
 def generatePassword(length):
     replacements = [["bang", "!"], ["star", "*"], ["pound", "#"],
-                    ["at", "@"], ["dot", "."], ["dash", "-"], ["comma", ","]]
+                    ["at", "@"], ["dot", "."], ["dash", "-"], ["comma", ","], ["dollar", "$"]]
     averageEnglishWordLength = 4
-    print("test")
     numWords = math.floor(length/averageEnglishWordLength)
     if(numWords > 1):
         numWords = numWords-1
@@ -34,17 +34,20 @@ def generatePassword(length):
     passwordNotFound = True
     wordsFound = 0
     while passwordNotFound:
-
         index = random.randint(0, len(words))
         temp = words[index]
-        print(temp)
         if((len(password) + len(temp)) < length):
             password = password+temp
-            reminder = reminder+temp
+            reminder = reminder+" "+temp
             wordsFound += 1
-        elif (numWords-wordsFound) < 2:
+        elif wordsFound == numWords:
             passwordNotFound = False
-
+    charLeft = length-len(password)
+    password = password
+    for i in range(charLeft):
+        index = random.randint(0, len(replacements))
+        password = password+replacements[index][1]
+        reminder = reminder + " " + replacements[index][0]
     return [password, reminder]
 
 # Subclass QMainWindow to customize your application's main window
@@ -95,14 +98,16 @@ class MainWindow(QMainWindow):
                 self.passwordDisplay.setText("Password length too long")
             else:
                 [password, reminder] = generatePassword(int(text))
-                print(password)
                 shouldCopy = self.shouldCopy.checkState()
                 if(shouldCopy):
                     pyperclip.copy(password)
                 self.passwordDisplay.setText("Password: " + password)
+                self.reminderDisplay.setText("Reminder: " + reminder)
 
         except:
-            print("Invalid length input")
+            self.passwordDisplay.setText("Invalid input length")
+            self.reminderDisplay.setText("Invalid input length")
+
 
 
 app = QApplication(sys.argv)
